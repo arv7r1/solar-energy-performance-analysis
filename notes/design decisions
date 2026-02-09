@@ -1,0 +1,33 @@
+# Design Decisions
+
+This document outlines key design and tooling decisions made during the development of this project, along with the rationale behind each choice.
+
+## Separation of Actual and Expected Data
+- Actual and expected energy datasets are maintained as separate sources to preserve data lineage and auditability.
+- This mirrors real-world operational environments where metered data and modeled data originate from different systems.
+
+## Excel as the Primary Analysis Tool
+- Microsoft Excel was selected to simulate rapid operational analysis commonly performed by energy operations and performance teams.
+- Pivot tables, structured formulas, and charts were favored over complex scripting to support transparency and ease of review by non-technical stakeholders.
+
+## Avoidance of Lookup-Based Joins
+- Initial attempts to reconcile actual and expected data using lookup formulas (e.g., XLOOKUP) were abandoned.
+- Time-series energy data behaves as relational data rather than simple lookup data, making pivot-based aggregation and column-level calculations more robust and scalable.
+
+## Use of Pivot Tables for Portfolio Analysis
+- Pivot tables were used to summarize performance metrics at the site and portfolio levels.
+- This approach supports rapid re-aggregation, filtering, and drill-down analysis without introducing fragile formula dependencies.
+
+## Validation-First Workflow
+- Data quality validation checks (AC vs DC comparison, zero energy detection) were applied prior to performance calculations.
+- This ensures that underperformance metrics reflect true operational issues rather than telemetry or ingestion errors.
+
+## Financial Impact Modeling
+- Financial impact was calculated at the row level and aggregated using pivot tables.
+- This design allows for transparent inspection of how individual deviations contribute to portfolio-level losses.
+
+## Charting Strategy
+- A helper table was used to generate charts from pivot table outputs to ensure stability and formatting control.
+- This approach avoids broken references when pivot table layouts change and reflects common professional Excel practices.
+
+These design choices prioritize clarity, auditability, and operational relevance over tool complexity, aligning the project with real-world energy analytics workflows.
